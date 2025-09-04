@@ -82,13 +82,13 @@ function loadScheduleData() {
     const schoolName = data.truong;
     const allClasses = data.classes.map(l => l.lop).join(', ');
     const totalStudents = data.classes.reduce((sum, l) => sum + parseInt(l.soLuongHS), 0);
-    const studentBreakdown = data.classes.map(l => `Lớp ${l.lop} (${l.soLuongHS})`).join(', ');
+    const studentBreakdown = data.classes.map(l => `Lớp ${l.lop} (${l.soLuongHS}/??)`).join(', ');
 
     // Populate "Báo cáo buổi dạy" tab
     document.getElementById('tenGV').value = firstLesson.tenGV;
     document.getElementById('tenTG').value = firstLesson.tenTG;
     document.getElementById('phongMay').value = firstLesson.phongMay;
-    document.getElementById('soLuongHS').value = `Tổng số: ${totalStudents} HS. Chi tiết: ${studentBreakdown}`;
+    document.getElementById('soLuongHS').value = `${studentBreakdown}`;
     
     // Fetch machine count based on the school's name
     const soMayData = getSoMayByTruong(schoolName);
@@ -100,13 +100,54 @@ function loadScheduleData() {
         document.getElementById('soMayHS').value = '';
     }
     
-    // Populate "Báo cáo chuyên môn" tab
-    document.getElementById('tenGVCM').value = firstLesson.tenGV;
-    document.getElementById('lopCM').value = allClasses;
-    document.getElementById('monCM').value = firstLesson.mon;
+    // Handle "Báo cáo chuyên môn" based on the number of classes
+    const chuyenMonForm = document.getElementById('chuyenMonForm');
+    const chuyenMonClassSelector = document.getElementById('chuyenMonClassSelector');
+    chuyenMonClassSelector.innerHTML = '';
+    
+    if (data.classes.length > 1) {
+        chuyenMonForm.classList.add('d-none');
+        const selectClasses = document.createElement('select');
+        selectClasses.classList.add('form-select', 'mb-3');
+        selectClasses.innerHTML = '<option value="">-- Chọn một lớp để báo cáo chuyên môn --</option>';
+
+        data.classes.forEach(lesson => {
+            const option = document.createElement('option');
+            option.value = JSON.stringify(lesson);
+            option.textContent = `Lớp ${lesson.lop}`;
+            selectClasses.appendChild(option);
+        });
+
+        selectClasses.onchange = function() {
+            if (this.value) {
+                const selectedLesson = JSON.parse(this.value);
+                populateChuyenMonForm(selectedLesson);
+                chuyenMonForm.classList.remove('d-none');
+            } else {
+                chuyenMonForm.classList.add('d-none');
+                resetChuyenMonFields();
+            }
+        };
+
+        chuyenMonClassSelector.appendChild(selectClasses);
+    } else {
+        chuyenMonForm.classList.remove('d-none');
+        populateChuyenMonForm(firstLesson);
+    }
 
     saveData();
     calculateTotal();
+}
+
+function populateChuyenMonForm(lesson) {
+    document.getElementById('tenGVCM').value = lesson.tenGV;
+    document.getElementById('lopCM').value = lesson.lop;
+    document.getElementById('monCM').value = lesson.mon;
+    document.getElementById('noiDungCM').value = ''; // Reset for a new class
+    document.getElementById('soTietDuKienCM').value = lesson.soTiet;
+    document.getElementById('soTietDaDayCM').value = '';
+    
+    updatePreviewChuyenMon();
 }
 
 function resetFormFields() {
@@ -119,14 +160,31 @@ function resetFormFields() {
     document.getElementById('tongSoMay').value = '';
     document.getElementById('soLuongHS').value = '';
     // Reset fields in the 'Chuyen Mon' tab
+    resetChuyenMonFields();
+    
+    // Hide chuyen mon form and clear its selector
+    document.getElementById('chuyenMonForm').classList.add('d-none');
+    document.getElementById('chuyenMonClassSelector').innerHTML = '';
+
+    calculateTotal();
+}
+
+function resetChuyenMonFields() {
     document.getElementById('tenGVCM').value = '';
     document.getElementById('lopCM').value = '';
     document.getElementById('monCM').value = 'GS6 Lv1';
     document.getElementById('noiDungCM').value = '';
     document.getElementById('soTietDuKienCM').value = '';
     document.getElementById('soTietDaDayCM').value = '';
-    
-    calculateTotal();
+    document.getElementById('soLanHoanThanhCM').value = '';
+    document.getElementById('gmt1FlashCM').value = '';
+    document.getElementById('gmt2FlashCM').value = '';
+    document.getElementById('ot1FlashCM').value = '';
+    document.getElementById('ot2FlashCM').value = '';
+    document.getElementById('ot3FlashCM').value = '';
+    document.getElementById('gmt1GmetrixCM').value = '';
+    document.getElementById('gmt2GmetrixCM').value = '';
+    updatePreviewChuyenMon();
 }
 
 function calculateTotal() {

@@ -8,7 +8,7 @@ const teachingSchedule = {
                 "soTiet": 2,
                 "tenGV": "Nguyễn Ngọc Tuyết Nhi",
                 "tenTG": "Không có",
-                "phongMay": "PM101",
+                "phongMay": "PM1",
                 "mon": "GS6 Lv1"
             },
             {
@@ -18,7 +18,7 @@ const teachingSchedule = {
                 "soTiet": 2,
                 "tenGV": "Nguyễn Ngọc Tuyết Nhi",
                 "tenTG": "Không có",
-                "phongMay": "PM101",
+                "phongMay": "PM1",
                 "mon": "GS6 Lv1"
             }
         ],
@@ -30,7 +30,7 @@ const teachingSchedule = {
                 "soTiet": 2,
                 "tenGV": "Nguyễn Ngọc Tuyết Nhi",
                 "tenTG": "Không có",
-                "phongMay": "PM101",
+                "phongMay": "PM1",
                 "mon": "GS6 Lv1"
             },
             {
@@ -40,7 +40,7 @@ const teachingSchedule = {
                 "soTiet": 2,
                 "tenGV": "Nguyễn Ngọc Tuyết Nhi",
                 "tenTG": "Không có",
-                "phongMay": "PM101",
+                "phongMay": "PM1",
                 "mon": "GS6 Lv1"
             }
         ]
@@ -54,7 +54,7 @@ const teachingSchedule = {
                 "soTiet": 2,
                 "tenGV": "Nguyễn Ngọc Tuyết Nhi",
                 "tenTG": "Không có",
-                "phongMay": "PM201",
+                "phongMay": "PM1",
                 "mon": "GS6 Lv1"
             },
             {
@@ -64,7 +64,7 @@ const teachingSchedule = {
                 "soTiet": 2,
                 "tenGV": "Nguyễn Ngọc Tuyết Nhi",
                 "tenTG": "Không có",
-                "phongMay": "PM201",
+                "phongMay": "PM2",
                 "mon": "GS6 Lv1"
             }
         ]
