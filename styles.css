@@ -19,4 +19,29 @@ body {
     flex-grow: 1;
 }
 
-/* No custom rule needed for form-control width due to new HTML structure and flexbox utility classes */
+/* Fixes form-control and textarea width consistency */
+.form-control,
+.form-control-full-width {
+    width: 100%;
+}
+
+/* Adjusted styles for a less wide card and tighter form spacing */
+.container.mt-4 {
+    max-width: 1000px; /* Adjust this value to your desired width */
+}
+/* Add padding to the card body to move content away from the edges */
+.card-body {
+    padding: 1.5rem;
+}
+
+/* Ensure all form controls have a consistent, full width */
+.form-control,
+.form-control-full-width {
+    width: 100%;
+}
+
+/* Remove the fixed width on the labels to let them grow naturally with content */
+.col-form-label {
+    flex-shrink: 0;
+    /* Remove the 'width: 250px;' rule */
+}
