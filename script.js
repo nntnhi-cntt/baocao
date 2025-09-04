@@ -4,7 +4,7 @@ function calculateTotal() {
     const tongSoMay = soMayGV + soMayHS;
     document.getElementById('tongSoMay').value = tongSoMay;
     saveData();
-    updatePreviewBaoCao();
+    updatePreviews();
 }
 
 function saveData() {
@@ -14,6 +14,7 @@ function saveData() {
         phongMay: document.getElementById('phongMay').value,
         soMayGV: document.getElementById('soMayGV').value,
         soMayHS: document.getElementById('soMayHS').value,
+        tongSoMay: document.getElementById('tongSoMay').value,
         soMayLoi: document.getElementById('soMayLoi').value,
         noteMayLoi: document.getElementById('noteMayLoi').value,
         soMayThieu: document.getElementById('soMayThieu').value,
@@ -24,7 +25,15 @@ function saveData() {
         tinhTrangDieuHoa: document.getElementById('tinhTrangDieuHoa').value,
         noteDieuHoa: document.getElementById('noteDieuHoa').value,
         tinhTrangVeSinh: document.getElementById('tinhTrangVeSinh').value,
-        noteVeSinh: document.getElementById('noteVeSinh').value
+        noteVeSinh: document.getElementById('noteVeSinh').value,
+        // Thêm các trường của báo cáo cuối buổi vào cùng một đối tượng
+        soLuongHS: document.getElementById('soLuongHS').value,
+        tyLeTaiLieu: document.getElementById('tyLeTaiLieu').value,
+        thietBiDien: document.getElementById('thietBiDien').value,
+        sapXepGhe: document.getElementById('sapXepGhe').value,
+        veSinhPhongMay: document.getElementById('veSinhPhongMay').value,
+        tuanThuNoiQuy: document.getElementById('tuanThuNoiQuy').value,
+        danhSachViPham: document.getElementById('danhSachViPham').value
     };
     localStorage.setItem('baoCaoData', JSON.stringify(baoCaoData));
 
@@ -52,11 +61,13 @@ function loadData() {
     const savedBaoCaoData = localStorage.getItem('baoCaoData');
     if (savedBaoCaoData) {
         const data = JSON.parse(savedBaoCaoData);
+        // Tải dữ liệu chung
         document.getElementById('tenGV').value = data.tenGV || '';
         document.getElementById('tenTG').value = data.tenTG || '';
         document.getElementById('phongMay').value = data.phongMay || '';
         document.getElementById('soMayGV').value = data.soMayGV || '1';
         document.getElementById('soMayHS').value = data.soMayHS || '';
+        document.getElementById('tongSoMay').value = data.tongSoMay || '';
         document.getElementById('soMayLoi').value = data.soMayLoi || '';
         document.getElementById('noteMayLoi').value = data.noteMayLoi || '';
         document.getElementById('soMayThieu').value = data.soMayThieu || '';
@@ -68,6 +79,14 @@ function loadData() {
         document.getElementById('noteDieuHoa').value = data.noteDieuHoa || '';
         document.getElementById('tinhTrangVeSinh').value = data.tinhTrangVeSinh || 'Sạch';
         document.getElementById('noteVeSinh').value = data.noteVeSinh || '';
+        // Tải dữ liệu cuối buổi
+        document.getElementById('soLuongHS').value = data.soLuongHS || '';
+        document.getElementById('tyLeTaiLieu').value = data.tyLeTaiLieu || '';
+        document.getElementById('thietBiDien').value = data.thietBiDien || 'Rồi';
+        document.getElementById('sapXepGhe').value = data.sapXepGhe || 'Rồi';
+        document.getElementById('veSinhPhongMay').value = data.veSinhPhongMay || 'Rồi';
+        document.getElementById('tuanThuNoiQuy').value = data.tuanThuNoiQuy || 'Tốt';
+        document.getElementById('danhSachViPham').value = data.danhSachViPham || '';
         calculateTotal();
     }
 
@@ -91,6 +110,11 @@ function loadData() {
         document.getElementById('gmt2GmetrixCM').value = data.gmt2GmetrixCM || '';
         updatePreviewChuyenMon();
     }
+}
+
+function updatePreviews() {
+    updatePreviewBaoCao();
+    updatePreviewCuoiBuoi();
 }
 
 function updatePreviewBaoCao() {
@@ -128,6 +152,55 @@ function updatePreviewBaoCao() {
     document.getElementById('previewBoxBaoCao').value = reportText;
 }
 
+function updatePreviewCuoiBuoi() {
+    const tenGV = document.getElementById('tenGV').value;
+    const tenTG = document.getElementById('tenTG').value;
+    const phongMay = document.getElementById('phongMay').value;
+    const soMayGV = document.getElementById('soMayGV').value;
+    const soMayHS = document.getElementById('soMayHS').value;
+    const tongSoMay = document.getElementById('tongSoMay').value;
+    const soMayLoi = document.getElementById('soMayLoi').value;
+    const soMayThieu = document.getElementById('soMayThieu').value;
+    const tinhTrangNetSupport = document.getElementById('tinhTrangNetSupport').value;
+    const tinhTrangAmThanh = document.getElementById('tinhTrangAmThanh').value;
+    const tinhTrangDieuHoa = document.getElementById('tinhTrangDieuHoa').value;
+    const tinhTrangVeSinh = document.getElementById('tinhTrangVeSinh').value;
+
+    const noteMayLoi = document.getElementById('noteMayLoi').value ? ` (${document.getElementById('noteMayLoi').value})` : '';
+    const noteNetsupport = document.getElementById('noteNetsupport').value ? ` (${document.getElementById('noteNetsupport').value})` : '';
+    const noteAmThanh = document.getElementById('noteAmThanh').value ? ` (${document.getElementById('noteAmThanh').value})` : '';
+    const noteDieuHoa = document.getElementById('noteDieuHoa').value ? ` (${document.getElementById('noteDieuHoa').value})` : '';
+    const noteVeSinh = document.getElementById('noteVeSinh').value ? ` (${document.getElementById('noteVeSinh').value})` : '';
+
+    const soLuongHS = document.getElementById('soLuongHS').value;
+    const tyLeTaiLieu = document.getElementById('tyLeTaiLieu').value;
+    const thietBiDien = document.getElementById('thietBiDien').value;
+    const sapXepGhe = document.getElementById('sapXepGhe').value;
+    const veSinhPhongMay = document.getElementById('veSinhPhongMay').value;
+    const tuanThuNoiQuy = document.getElementById('tuanThuNoiQuy').value;
+    const danhSachViPham = document.getElementById('danhSachViPham').value;
+
+    const reportText = `BÁO CÁO CUỐI BUỔI DẠY
+- Tên Giáo Viên: ${tenGV}
+- Tên Trợ Giảng: ${tenTG}
+- Phòng Máy: ${phongMay}
+- Tổng số máy: ${tongSoMay} máy (Gồm ${soMayGV} GV + ${soMayHS} HS)
+- Số lượng HS: ${soLuongHS}
+- Tỷ lệ học sinh có tài liệu: ${tyLeTaiLieu}%
+- Tổng số máy bị lỗi: ${soMayLoi} máy${noteMayLoi}
+- Số máy còn thiếu cho HS: ${soMayThieu} máy
+- Tình trạng Netsupport: ${tinhTrangNetSupport}${noteNetsupport}
+- Tình trạng Loa, Âm ly: ${tinhTrangAmThanh}${noteAmThanh}
+- Tình trạng máy lạnh, máy quạt: ${tinhTrangDieuHoa}${noteDieuHoa}
+- Đã tắt các thiết bị điện chưa: ${thietBiDien}
+- HS sắp xếp ghế ngồi gọn gàng: ${sapXepGhe}
+- HS vệ sinh phòng máy: ${veSinhPhongMay}
+- Tuân thủ nội quy của HS: ${tuanThuNoiQuy}
+- Danh sách vi phạm: ${danhSachViPham}`;
+
+    document.getElementById('previewBoxCuoiBuoi').value = reportText;
+}
+
 function updatePreviewChuyenMon() {
     const tenGVCM = document.getElementById('tenGVCM').value;
     const lopCM = document.getElementById('lopCM').value;
@@ -161,11 +234,13 @@ function updatePreviewChuyenMon() {
     document.getElementById('previewBoxChuyenMon').value = reportText;
 }
 
-function generateAndCopyReport(formId) {
+function generateAndCopyReport(reportType) {
     let reportText;
-    if (formId === 'BaoCao') {
+    if (reportType === 'BaoCaoDauBuoi') {
         reportText = document.getElementById('previewBoxBaoCao').value;
-    } else if (formId === 'ChuyenMon') {
+    } else if (reportType === 'BaoCaoCuoiBuoi') {
+        reportText = document.getElementById('previewBoxCuoiBuoi').value;
+    } else if (reportType === 'ChuyenMon') {
         reportText = document.getElementById('previewBoxChuyenMon').value;
     } else {
         return;
@@ -181,7 +256,7 @@ function generateAndCopyReport(formId) {
 
 document.getElementById('baoCaoForm').addEventListener('input', () => {
     saveData();
-    updatePreviewBaoCao();
+    updatePreviews();
 });
 
 document.getElementById('chuyenMonForm').addEventListener('input', () => {
@@ -191,15 +266,15 @@ document.getElementById('chuyenMonForm').addEventListener('input', () => {
 
 document.addEventListener("DOMContentLoaded", function() {
     loadData();
+    updatePreviews();
 });
 
-// Event listeners for Bootstrap's tab shown event
 document.getElementById('baoCao-tab').addEventListener('shown.bs.tab', event => {
-  saveData();
-  updatePreviewBaoCao();
+    saveData();
+    updatePreviews();
 });
 
 document.getElementById('chuyenMon-tab').addEventListener('shown.bs.tab', event => {
-  saveData();
-  updatePreviewChuyenMon();
+    saveData();
+    updatePreviewChuyenMon();
 });
