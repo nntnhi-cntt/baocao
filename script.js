@@ -3,7 +3,6 @@ function calculateTotal() {
     const soMayHS = parseInt(document.getElementById('soMayHS').value) || 0;
     const tongSoMay = soMayGV + soMayHS;
     document.getElementById('tongSoMay').value = tongSoMay;
-    saveData();
     updatePreviews();
 }
 
@@ -26,7 +25,6 @@ function saveData() {
         noteDieuHoa: document.getElementById('noteDieuHoa').value,
         tinhTrangVeSinh: document.getElementById('tinhTrangVeSinh').value,
         noteVeSinh: document.getElementById('noteVeSinh').value,
-        // Thêm các trường của báo cáo cuối buổi vào cùng một đối tượng
         soLuongHS: document.getElementById('soLuongHS').value,
         tyLeTaiLieu: document.getElementById('tyLeTaiLieu').value,
         thietBiDien: document.getElementById('thietBiDien').value,
@@ -59,9 +57,10 @@ function saveData() {
 
 function loadData() {
     const savedBaoCaoData = localStorage.getItem('baoCaoData');
+    const savedChuyenMonData = localStorage.getItem('chuyenMonData');
+
     if (savedBaoCaoData) {
         const data = JSON.parse(savedBaoCaoData);
-        // Tải dữ liệu chung
         document.getElementById('tenGV').value = data.tenGV || '';
         document.getElementById('tenTG').value = data.tenTG || '';
         document.getElementById('phongMay').value = data.phongMay || '';
@@ -79,7 +78,6 @@ function loadData() {
         document.getElementById('noteDieuHoa').value = data.noteDieuHoa || '';
         document.getElementById('tinhTrangVeSinh').value = data.tinhTrangVeSinh || 'Sạch';
         document.getElementById('noteVeSinh').value = data.noteVeSinh || '';
-        // Tải dữ liệu cuối buổi
         document.getElementById('soLuongHS').value = data.soLuongHS || '';
         document.getElementById('tyLeTaiLieu').value = data.tyLeTaiLieu || '';
         document.getElementById('thietBiDien').value = data.thietBiDien || 'Rồi';
@@ -88,9 +86,9 @@ function loadData() {
         document.getElementById('tuanThuNoiQuy').value = data.tuanThuNoiQuy || 'Tốt';
         document.getElementById('danhSachViPham').value = data.danhSachViPham || '';
         calculateTotal();
+        updatePreviews(); // Call updatePreviews after loading data
     }
 
-    const savedChuyenMonData = localStorage.getItem('chuyenMonData');
     if (savedChuyenMonData) {
         const data = JSON.parse(savedChuyenMonData);
         document.getElementById('tenGVCM').value = data.tenGVCM || '';
@@ -108,7 +106,7 @@ function loadData() {
         document.getElementById('ot3FlashCM').value = data.ot3FlashCM || '';
         document.getElementById('gmt1GmetrixCM').value = data.gmt1GmetrixCM || '';
         document.getElementById('gmt2GmetrixCM').value = data.gmt2GmetrixCM || '';
-        updatePreviewChuyenMon();
+        updatePreviewChuyenMon(); // Call updatePreviewChuyenMon after loading data
     }
 }
 
@@ -254,27 +252,16 @@ function generateAndCopyReport(reportType) {
     });
 }
 
+document.addEventListener("DOMContentLoaded", function() {
+    loadData();
+});
+
 document.getElementById('baoCaoForm').addEventListener('input', () => {
     saveData();
     updatePreviews();
 });
 
 document.getElementById('chuyenMonForm').addEventListener('input', () => {
-    saveData();
-    updatePreviewChuyenMon();
-});
-
-document.addEventListener("DOMContentLoaded", function() {
-    loadData();
-    updatePreviews();
-});
-
-document.getElementById('baoCao-tab').addEventListener('shown.bs.tab', event => {
-    saveData();
-    updatePreviews();
-});
-
-document.getElementById('chuyenMon-tab').addEventListener('shown.bs.tab', event => {
     saveData();
     updatePreviewChuyenMon();
 });
