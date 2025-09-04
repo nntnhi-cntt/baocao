@@ -53,19 +53,19 @@
                         <div class="row mb-3">
                             <label for="tenGV" class="col-sm-4 col-form-label">Tên Giáo Viên:</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" id="tenGV" name="tenGV" required>
+                                <input type="text" class="form-control" id="tenGV" name="tenGV" placeholder="Họ tên giáo viên chính" required>
                             </div>
                         </div>
                         <div class="row mb-3">
                             <label for="tenTG" class="col-sm-4 col-form-label">Tên Trợ Giảng:</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" id="tenTG" name="tenTG">
+                                <input type="text" class="form-control" id="tenTG" name="tenTG" placeholder="Ghi 'Không có' nếu không có trợ giảng">
                             </div>
                         </div>
                         <div class="row mb-3">
                             <label for="phongMay" class="col-sm-4 col-form-label">Phòng Máy:</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" id="phongMay" name="phongMay" required>
+                                <input type="text" class="form-control" id="phongMay" name="phongMay" value="PM" required>
                             </div>
                         </div>
                         <div class="row mb-3">
@@ -90,13 +90,13 @@
                             <label for="soMayLoi" class="col-sm-4 col-form-label">Tổng số máy bị lỗi:</label>
                             <div class="col-sm-8 d-flex">
                                 <input type="number" class="form-control me-2" id="soMayLoi" name="soMayLoi" min="0" required>
-                                <input type="text" class="form-control note-input" id="noteMayLoi" placeholder="Ghi chú máy lỗi">
+                                <input type="text" class="form-control note-input" id="noteMayLoi" placeholder="Ghi chú chi tiết máy số mấy, bị lỗi gì">
                             </div>
                         </div>
                         <div class="row mb-3">
                             <label for="soMayThieu" class="col-sm-4 col-form-label">Số máy còn thiếu cho HS:</label>
                             <div class="col-sm-8">
-                                <input type="number" class="form-control" id="soMayThieu" name="soMayThieu" min="0" required>
+                                <input type="number" class="form-control" id="soMayThieu" name="soMayThieu" min="0" value="0" required>
                             </div>
                         </div>
                         <div class="row mb-3">
@@ -118,7 +118,7 @@
                                     <option value="Lỗi">Lỗi</option>
                                     <option value="Không có">Không có</option>
                                 </select>
-                                <input type="text" class="form-control note-input" id="noteAmThanh" placeholder="Ghi chú loa/âm ly">
+                                <input type="text" class="form-control note-input" id="noteAmThanh" placeholder="Ghi chú loa/âm ly/tình trạng micro">
                             </div>
                         </div>
                         <div class="row mb-3">
@@ -129,7 +129,7 @@
                                     <option value="Lỗi">Lỗi</option>
                                     <option value="Không có">Không có</option>
                                 </select>
-                                <input type="text" class="form-control note-input" id="noteDieuHoa" placeholder="Ghi chú máy lạnh/quạt">
+                                <input type="text" class="form-control note-input" id="noteDieuHoa" placeholder="Ghi chú về máy lạnh/quạt trong trường hợp lỗi, hỏng hóc">
                             </div>
                         </div>
                         <div class="row mb-3">
@@ -139,7 +139,7 @@
                                     <option value="Sạch">Sạch</option>
                                     <option value="Chưa sạch">Chưa sạch</option>
                                 </select>
-                                <input type="text" class="form-control note-input" id="noteVeSinh" placeholder="Ghi chú vệ sinh">
+                                <input type="text" class="form-control note-input" id="noteVeSinh" placeholder="Ghi chú về vệ sinh phòng máy">
                             </div>
                         </div>
 
@@ -147,13 +147,13 @@
                         <div class="row mb-3">
                             <label for="soLuongHS" class="col-sm-4 col-form-label">Số lượng HS:</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" id="soLuongHS" name="soLuongHS" placeholder="VD: Lớp 3.1 (27/27), lớp 10.1 (5/4)">
+                                <input type="text" class="form-control" id="soLuongHS" name="soLuongHS" placeholder="Điền tên lớp và sĩ số/hiện diện, ví dụ: Lớp 6A1 (27/20), lớp 6A12 (30/28)">
                             </div>
                         </div>
                         <div class="row mb-3">
                             <label for="tyLeTaiLieu" class="col-sm-4 col-form-label">Tỷ lệ học sinh có tài liệu (%):</label>
                             <div class="col-sm-8">
-                                <input type="number" class="form-control" id="tyLeTaiLieu" name="tyLeTaiLieu" min="0" max="100">
+                                <input type="number" class="form-control" id="tyLeTaiLieu" name="tyLeTaiLieu" min="0" max="100" value="0">
                             </div>
                         </div>
                         <div class="row mb-3">
@@ -197,13 +197,13 @@
                         <div class="row mb-3">
                             <label for="danhSachViPham" class="col-sm-4 col-form-label">Danh sách vi phạm:</label>
                             <div class="col-sm-8">
-                                <input type="number" class="form-control" id="danhSachViPham" name="danhSachViPham" min="0">
+                                <input type="number" class="form-control" id="danhSachViPham" name="danhSachViPham" min="0" value="0">
                             </div>
                         </div>
                         
                         <div class="mb-3">
                             <label for="previewBoxBaoCao" class="form-label">Nội dung báo cáo Đầu buổi:</label>
-                            <textarea class="form-control form-control-full-width" id="previewBoxBaoCao" name="previewBoxBaoCao" rows="11" readonly></textarea>
+                            <textarea class="form-control form-control-full-width" id="previewBoxBaoCao" name="previewBoxBaoCao" rows="11"></textarea>
                         </div>
                         <div class="d-grid gap-2 d-md-flex justify-content-md-end mb-3">
                             <button type="button" class="btn btn-primary" onclick="generateAndCopyReport('BaoCaoDauBuoi')">Tạo & Sao chép Báo cáo Đầu buổi</button>
@@ -211,7 +211,7 @@
 
                         <div class="mb-3">
                             <label for="previewBoxCuoiBuoi" class="form-label">Nội dung báo cáo Cuối buổi:</label>
-                            <textarea class="form-control form-control-full-width" id="previewBoxCuoiBuoi" name="previewBoxCuoiBuoi" rows="17" readonly></textarea>
+                            <textarea class="form-control form-control-full-width" id="previewBoxCuoiBuoi" name="previewBoxCuoiBuoi" rows="17"></textarea>
                         </div>
                         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                             <button type="button" class="btn btn-primary" onclick="generateAndCopyReport('BaoCaoCuoiBuoi')">Tạo & Sao chép Báo cáo Cuối buổi</button>
@@ -256,7 +256,7 @@
                         <div class="row mb-3">
                             <label for="soTietDuKienCM" class="col-sm-4 col-form-label">Số tiết dự kiến:</label>
                             <div class="col-sm-8">
-                                <input type="number" class="form-control" id="soTietDuKienCM" name="soTietDuKienCM" min="0">
+                                <input type="number" class="form-control" id="soTietDuKienCM" name="soTietDuKienCM" min="0" value="60">
                             </div>
                         </div>
                         <div class="row mb-3">
@@ -268,7 +268,7 @@
                         <div class="row mb-3">
                             <label for="soLanHoanThanhCM" class="col-sm-4 col-form-label">Số lần hoàn thành bài tổng hợp:</label>
                             <div class="col-sm-8">
-                                <input type="number" class="form-control" id="soLanHoanThanhCM" name="soLanHoanThanhCM" min="0">
+                                <input type="number" class="form-control" id="soLanHoanThanhCM" name="soLanHoanThanhCM" min="0" value="0">
                             </div>
                         </div>
                         <div class="row mb-3">
@@ -302,7 +302,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="previewBoxChuyenMon" class="form-label">Nội dung báo cáo:</label>
-                            <textarea class="form-control form-control-full-width" id="previewBoxChuyenMon" name="previewBoxChuyenMon" rows="12" readonly></textarea>
+                            <textarea class="form-control form-control-full-width" id="previewBoxChuyenMon" name="previewBoxChuyenMon" rows="12"></textarea>
                         </div>
                         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                             <button type="button" class="btn btn-primary" onclick="generateAndCopyReport('ChuyenMon')">Tạo & Sao chép Báo cáo</button>
