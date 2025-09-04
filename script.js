@@ -1,8 +1,24 @@
+function populateScheduleDropdown() { 
+    const dropdown = document.getElementById('buoiDay'); 
+    dropdown.innerHTML = '<option value="">-- Chọn buổi dạy --</option>'; // Clear old options 
+
+    for (const day in teachingSchedule) { 
+        for (const session in teachingSchedule[day]) { 
+            teachingSchedule[day][session].forEach(lesson => { 
+                const option = document.createElement('option'); 
+                option.value = `${day} - ${session} - ${lesson.lop} - ${lesson.truong}`; 
+                option.textContent = `${day}, ${session} - Lớp ${lesson.lop}, Trường ${lesson.truong} (${lesson.soLuongHS} HS)`; 
+                dropdown.appendChild(option); 
+            }); 
+        } 
+    } 
+}
 function calculateTotal() {
     const soMayGV = parseInt(document.getElementById('soMayGV').value) || 0;
     const soMayHS = parseInt(document.getElementById('soMayHS').value) || 0;
     const tongSoMay = soMayGV + soMayHS;
     document.getElementById('tongSoMay').value = tongSoMay;
+    // Removed saveData() here
     updatePreviews();
 }
 
@@ -252,10 +268,6 @@ function generateAndCopyReport(reportType) {
     });
 }
 
-document.addEventListener("DOMContentLoaded", function() {
-    loadData();
-});
-
 document.getElementById('baoCaoForm').addEventListener('input', () => {
     saveData();
     updatePreviews();
@@ -265,3 +277,47 @@ document.getElementById('chuyenMonForm').addEventListener('input', () => {
     saveData();
     updatePreviewChuyenMon();
 });
+function loadScheduleData() {
+    const selectedValue = document.getElementById('buoiDay').value;
+    if (!selectedValue) return;
+
+    const [day, session, lop, truong] = selectedValue.split(' - ');
+    let lessonData = null;
+
+    if (teachingSchedule[day] && teachingSchedule[day][session]) {
+        lessonData = teachingSchedule[day][session].find(l => l.lop === lop && l.truong === truong);
+    }
+    
+    if (lessonData) {
+        document.getElementById('tenGV').value = lessonData.tenGV;
+        document.getElementById('tenTG').value = lessonData.tenTG;
+        
+
+        // Fetch machine count based on the school's name
+        const soMayData = getSoMayByTruong(lessonData.truong);
+        if (soMayData) {
+            document.getElementById('soMayGV').value = soMayData.soMayGV;
+            document.getElementById('soMayHS').value = soMayData.soMayHS;
+            document.getElementById('phongMay').value = soMayData.tenPhong;
+        } else {
+            // Default values if no match is found
+            document.getElementById('soMayGV').value = '1';
+            document.getElementById('soMayHS').value = '';
+            document.getElementById('phongMay').value = 'PM';
+        }
+        
+        document.getElementById('soLuongHS').value = `Lớp ${lessonData.lop} (${lessonData.soLuongHS}/?)`;
+        document.getElementById('monCM').value = lessonData.mon;
+
+        saveData();
+        calculateTotal();
+    }
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+    loadData();
+    populateScheduleDropdown(); // Thêm dòng này để điền dữ liệu vào dropdown
+});
+
+// The shown.bs.tab listeners are not needed for saving, but can be used for updating the preview if desired.
+// Since we have input listeners, this is redundant. It's best to remove them for a cleaner, more efficient implementation.
