@@ -117,9 +117,9 @@ function updatePreviewBaoCao() {
 - Tên Giáo Viên: ${tenGV}
 - Tên Trợ Giảng: ${tenTG}
 - Phòng Máy: ${phongMay}
-- Tổng số máy: ${tongSoMay} máy (Gồm ${soMayGV} GV + ${soMayHS} HS).
-- Tổng số máy bị lỗi: ${soMayLoi} máy${noteMayLoi}.
-- Số máy còn thiếu cho HS: ${soMayThieu} máy.
+- Tổng số máy: ${tongSoMay} máy (Gồm ${soMayGV} GV + ${soMayHS} HS)
+- Tổng số máy bị lỗi: ${soMayLoi} máy${noteMayLoi}
+- Số máy còn thiếu cho HS: ${soMayThieu} máy
 - Tình trạng Netsupport: ${tinhTrangNetSupport}${noteNetsupport}
 - Tình trạng Loa, Âm ly: ${tinhTrangAmThanh}${noteAmThanh}
 - Tình trạng máy lạnh, máy quạt: ${tinhTrangDieuHoa}${noteDieuHoa}
@@ -154,9 +154,9 @@ function updatePreviewChuyenMon() {
 - Số tiết dự kiến: ${soTietDuKienCM}
 - Số tiết đã dạy: ${soTietDaDayCM}
 - Số lần hoàn thành bài tổng hợp: ${soLanHoanThanhCM}
-- Tỷ lệ kết quả Flash: GMT 1(${gmt1FlashCM}%), GMT 2(${gmt2FlashCM}%)
+- Tỷ lệ kết quả Flash: GMT 1 (${gmt1FlashCM}%), GMT 2 (${gmt2FlashCM}%)
 - Tỷ lệ kết quả Flash OT: OT 1 (${ot1FlashCM}%), OT 2 (${ot2FlashCM}%), OT 3 (${ot3FlashCM}%)
-- Tỷ lệ kết quả điểm Gmetrix: GMT 1(${gmt1GmetrixCM}%), GMT 2(${gmt2GmetrixCM}%)`;
+- Tỷ lệ kết quả điểm Gmetrix: GMT 1 (${gmt1GmetrixCM}%), GMT 2 (${gmt2GmetrixCM}%)`;
 
     document.getElementById('previewBoxChuyenMon').value = reportText;
 }
