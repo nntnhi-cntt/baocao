@@ -1,24 +1,139 @@
-function populateScheduleDropdown() { 
-    const dropdown = document.getElementById('buoiDay'); 
-    dropdown.innerHTML = '<option value="">-- Chọn buổi dạy --</option>'; // Clear old options 
-
-    for (const day in teachingSchedule) { 
-        for (const session in teachingSchedule[day]) { 
-            teachingSchedule[day][session].forEach(lesson => { 
-                const option = document.createElement('option'); 
-                option.value = `${day} - ${session} - ${lesson.lop} - ${lesson.truong}`; 
-                option.textContent = `${day}, ${session} - Lớp ${lesson.lop}, Trường ${lesson.truong} (${lesson.soLuongHS} HS)`; 
-                dropdown.appendChild(option); 
-            }); 
-        } 
-    } 
+function populateDayDropdown() {
+    const daySelect = document.getElementById('daySelect');
+    daySelect.innerHTML = '<option value="">-- Chọn thứ --</option>';
+    const days = Object.keys(teachingSchedule);
+    days.forEach(day => {
+        const option = document.createElement('option');
+        option.value = day;
+        option.textContent = day;
+        daySelect.appendChild(option);
+    });
+    // Re-enable session and class selects if they were disabled
+    document.getElementById('sessionSelect').disabled = true;
+    document.getElementById('classSelect').disabled = true;
 }
+
+function populateSessionDropdown() {
+    const daySelect = document.getElementById('daySelect');
+    const sessionSelect = document.getElementById('sessionSelect');
+    const selectedDay = daySelect.value;
+    
+    sessionSelect.innerHTML = '<option value="">-- Chọn buổi --</option>';
+    sessionSelect.disabled = true;
+    document.getElementById('classSelect').disabled = true;
+
+    if (selectedDay) {
+        const sessions = Object.keys(teachingSchedule[selectedDay]);
+        sessions.forEach(session => {
+            const option = document.createElement('option');
+            option.value = session;
+            option.textContent = session;
+            sessionSelect.appendChild(option);
+        });
+        sessionSelect.disabled = false;
+    }
+    // Reset other fields on day change
+    resetFormFields();
+}
+
+function populateClassDropdown() {
+    const daySelect = document.getElementById('daySelect');
+    const sessionSelect = document.getElementById('sessionSelect');
+    const classSelect = document.getElementById('classSelect');
+    const selectedDay = daySelect.value;
+    const selectedSession = sessionSelect.value;
+    
+    classSelect.innerHTML = '<option value="">-- Chọn lớp/trường --</option>';
+    classSelect.disabled = true;
+
+    if (selectedDay && selectedSession) {
+        const classes = teachingSchedule[selectedDay][selectedSession];
+        // Group classes by school
+        const schools = {};
+        classes.forEach(lesson => {
+            if (!schools[lesson.truong]) {
+                schools[lesson.truong] = [];
+            }
+            schools[lesson.truong].push(lesson);
+        });
+
+        // Create options for each school group
+        for (const school in schools) {
+            const option = document.createElement('option');
+            const classNames = schools[school].map(l => l.lop).join(', ');
+            const totalStudents = schools[school].reduce((sum, l) => sum + parseInt(l.soLuongHS), 0);
+            option.value = JSON.stringify({ truong: school, classes: schools[school] });
+            option.textContent = `Lớp ${classNames}, Trường ${school} (${totalStudents} HS)`;
+            classSelect.appendChild(option);
+        }
+        classSelect.disabled = false;
+    }
+    // Reset other fields on session change
+    resetFormFields();
+}
+
+function loadScheduleData() {
+    const classSelect = document.getElementById('classSelect');
+    const selectedValue = classSelect.value;
+    if (!selectedValue) return;
+
+    const data = JSON.parse(selectedValue);
+    const firstLesson = data.classes[0];
+    const schoolName = data.truong;
+    const allClasses = data.classes.map(l => l.lop).join(', ');
+    const totalStudents = data.classes.reduce((sum, l) => sum + parseInt(l.soLuongHS), 0);
+    const studentBreakdown = data.classes.map(l => `Lớp ${l.lop} (${l.soLuongHS})`).join(', ');
+
+    // Populate "Báo cáo buổi dạy" tab
+    document.getElementById('tenGV').value = firstLesson.tenGV;
+    document.getElementById('tenTG').value = firstLesson.tenTG;
+    document.getElementById('phongMay').value = firstLesson.phongMay;
+    document.getElementById('soLuongHS').value = `Tổng số: ${totalStudents} HS. Chi tiết: ${studentBreakdown}`;
+    
+    // Fetch machine count based on the school's name
+    const soMayData = getSoMayByTruong(schoolName);
+    if (soMayData) {
+        document.getElementById('soMayGV').value = soMayData.soMayGV;
+        document.getElementById('soMayHS').value = soMayData.soMayHS;
+    } else {
+        document.getElementById('soMayGV').value = '1';
+        document.getElementById('soMayHS').value = '';
+    }
+    
+    // Populate "Báo cáo chuyên môn" tab
+    document.getElementById('tenGVCM').value = firstLesson.tenGV;
+    document.getElementById('lopCM').value = allClasses;
+    document.getElementById('monCM').value = firstLesson.mon;
+
+    saveData();
+    calculateTotal();
+}
+
+function resetFormFields() {
+    // Reset fields in the 'Bao Cao' tab
+    document.getElementById('tenGV').value = '';
+    document.getElementById('tenTG').value = '';
+    document.getElementById('phongMay').value = '';
+    document.getElementById('soMayGV').value = '1';
+    document.getElementById('soMayHS').value = '';
+    document.getElementById('tongSoMay').value = '';
+    document.getElementById('soLuongHS').value = '';
+    // Reset fields in the 'Chuyen Mon' tab
+    document.getElementById('tenGVCM').value = '';
+    document.getElementById('lopCM').value = '';
+    document.getElementById('monCM').value = 'GS6 Lv1';
+    document.getElementById('noiDungCM').value = '';
+    document.getElementById('soTietDuKienCM').value = '';
+    document.getElementById('soTietDaDayCM').value = '';
+    
+    calculateTotal();
+}
+
 function calculateTotal() {
     const soMayGV = parseInt(document.getElementById('soMayGV').value) || 0;
     const soMayHS = parseInt(document.getElementById('soMayHS').value) || 0;
     const tongSoMay = soMayGV + soMayHS;
     document.getElementById('tongSoMay').value = tongSoMay;
-    // Removed saveData() here
     updatePreviews();
 }
 
@@ -277,47 +392,8 @@ document.getElementById('chuyenMonForm').addEventListener('input', () => {
     saveData();
     updatePreviewChuyenMon();
 });
-function loadScheduleData() {
-    const selectedValue = document.getElementById('buoiDay').value;
-    if (!selectedValue) return;
-
-    const [day, session, lop, truong] = selectedValue.split(' - ');
-    let lessonData = null;
-
-    if (teachingSchedule[day] && teachingSchedule[day][session]) {
-        lessonData = teachingSchedule[day][session].find(l => l.lop === lop && l.truong === truong);
-    }
-    
-    if (lessonData) {
-        document.getElementById('tenGV').value = lessonData.tenGV;
-        document.getElementById('tenTG').value = lessonData.tenTG;
-        
-
-        // Fetch machine count based on the school's name
-        const soMayData = getSoMayByTruong(lessonData.truong);
-        if (soMayData) {
-            document.getElementById('soMayGV').value = soMayData.soMayGV;
-            document.getElementById('soMayHS').value = soMayData.soMayHS;
-            document.getElementById('phongMay').value = soMayData.tenPhong;
-        } else {
-            // Default values if no match is found
-            document.getElementById('soMayGV').value = '1';
-            document.getElementById('soMayHS').value = '';
-            document.getElementById('phongMay').value = 'PM';
-        }
-        
-        document.getElementById('soLuongHS').value = `Lớp ${lessonData.lop} (${lessonData.soLuongHS}/?)`;
-        document.getElementById('monCM').value = lessonData.mon;
-
-        saveData();
-        calculateTotal();
-    }
-}
 
 document.addEventListener("DOMContentLoaded", function() {
     loadData();
-    populateScheduleDropdown(); // Thêm dòng này để điền dữ liệu vào dropdown
+    populateDayDropdown();
 });
-
-// The shown.bs.tab listeners are not needed for saving, but can be used for updating the preview if desired.
-// Since we have input listeners, this is redundant. It's best to remove them for a cleaner, more efficient implementation.

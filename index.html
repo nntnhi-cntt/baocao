@@ -24,11 +24,27 @@
         <div class="card-body">
             <div class="tab-content" id="myTabContent">
 <div class="row mb-3">
-    <label for="buoiDay" class="col-sm-4 col-form-label">Chọn buổi dạy:</label>
+    <label for="daySelect" class="col-sm-4 col-form-label">Chọn thứ:</label>
     <div class="col-sm-8">
-        <select class="form-select" id="buoiDay" name="buoiDay" onchange="loadScheduleData()">
-            <option value="">-- Chọn buổi dạy --</option>
-            </select>
+        <select class="form-select" id="daySelect" onchange="populateSessionDropdown()">
+            <option value="">-- Chọn thứ --</option>
+        </select>
+    </div>
+</div>
+<div class="row mb-3">
+    <label for="sessionSelect" class="col-sm-4 col-form-label">Chọn buổi:</label>
+    <div class="col-sm-8">
+        <select class="form-select" id="sessionSelect" onchange="populateClassDropdown()" disabled>
+            <option value="">-- Chọn buổi --</option>
+        </select>
+    </div>
+</div>
+<div class="row mb-3">
+    <label for="classSelect" class="col-sm-4 col-form-label">Chọn Lớp/Trường:</label>
+    <div class="col-sm-8">
+        <select class="form-select" id="classSelect" onchange="loadScheduleData()" disabled>
+            <option value="">-- Chọn lớp/trường --</option>
+        </select>
     </div>
 </div>
                 <div class="tab-pane fade show active" id="baoCao" role="tabpanel" aria-labelledby="baoCao-tab">
