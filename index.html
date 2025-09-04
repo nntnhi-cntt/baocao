@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Báo Cáo Đầu Buổi Dạy</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .tabs {
+            display: flex;
+            justify-content: center;
+            background-color: #333;
+            color: white;
+            padding: 10px 0;
+        }
+
+        .tabs button {
+            background-color: #555;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            padding: 14px 20px;
+            transition: 0.3s;
+            font-size: 17px;
+            color: white;
+            border-radius: 5px 5px 0 0;
+            margin: 0 5px;
+        }
+
+        .tabs button:hover {
+            background-color: #777;
+        }
+
+        .tabs button.active {
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-top: none;
+            background-color: white;
+            margin: 20px auto;
+            max-width: 800px;
+            border-radius: 0 0 5px 5px;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .form-section {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .form-row label {
+            width: 200px;
+            min-width: 150px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        .form-row input[type="text"], .form-row input[type="number"], .form-row select {
+            flex-grow: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        
+        .form-row .note-input {
+            margin-left: 10px;
+        }
+
+        .form-row input[readonly] {
+            background-color: #e9ecef;
+            cursor: not-allowed;
+        }
+
+        .form-row input[type="number"] {
+            width: 80px;
+        }
+
+        .form-actions {
+            margin-top: 20px;
+            text-align: right;
+        }
+
+        .form-actions button {
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            background-color: #007BFF;
+            color: white;
+        }
+        
+        #previewBox {
+            width: 100%;
+            min-height: 200px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 10px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            background-color: #f8f9fa;
+        }
+    </style>
+</head>
+<body>
+
+<div class="tabs">
+    <button class="tab-button active" onclick="openTab(event, 'BaoCao')">Báo Cáo</button>
+    <button class="tab-button" onclick="openTab(event, 'Tab2')">Tab 2</button>
+    <button class="tab-button" onclick="openTab(event, 'Tab3')">Tab 3</button>
+</div>
+
+<div id="BaoCao" class="tab-content active">
+    <h2>BÁO CÁO ĐẦU BUỔI DẠY</h2>
+    <form id="baoCaoForm" class="form-section">
+        <div class="form-row">
+            <label for="tenGV">Tên Giáo Viên:</label>
+            <input type="text" id="tenGV" name="tenGV" required>
+        </div>
+        <div class="form-row">
+            <label for="tenTG">Tên Trợ Giảng:</label>
+            <input type="text" id="tenTG" name="tenTG">
+        </div>
+        <div class="form-row">
+            <label for="phongMay">Phòng Máy:</label>
+            <input type="text" id="phongMay" name="phongMay" required>
+        </div>
+        <div class="form-row">
+            <label for="soMayGV">Số máy Giáo viên:</label>
+            <input type="number" id="soMayGV" name="soMayGV" min="0" value="1" oninput="calculateTotal()" required>
+        </div>
+        <div class="form-row">
+            <label for="soMayHS">Số máy Học sinh:</label>
+            <input type="number" id="soMayHS" name="soMayHS" min="0" oninput="calculateTotal()" required>
+        </div>
+        <div class="form-row">
+            <label for="tongSoMay">Tổng số máy:</label>
+            <input type="number" id="tongSoMay" name="tongSoMay" min="0" readonly>
+        </div>
+        <div class="form-row">
+            <label for="soMayLoi">Tổng số máy bị lỗi:</label>
+            <input type="number" id="soMayLoi" name="soMayLoi" min="0" required>
+            <input type="text" id="noteMayLoi" class="note-input" placeholder="Ghi chú máy lỗi">
+        </div>
+        <div class="form-row">
+            <label for="soMayThieu">Số máy còn thiếu cho HS:</label>
+            <input type="number" id="soMayThieu" name="soMayThieu" min="0" required>
+        </div>
+        <div class="form-row">
+            <label for="tinhTrangNetSupport">Tình trạng Netsupport:</label>
+            <select id="tinhTrangNetSupport" name="tinhTrangNetSupport">
+                <option value="Tốt">Tốt</option>
+                <option value="Lỗi">Lỗi</option>
+                <option value="Không có">Không có</option>
+            </select>
+            <input type="text" id="noteNetsupport" class="note-input" placeholder="Ghi chú Netsupport">
+        </div>
+        <div class="form-row">
+            <label for="tinhTrangAmThanh">Tình trạng Loa, Âm ly:</label>
+            <select id="tinhTrangAmThanh" name="tinhTrangAmThanh">
+                <option value="Tốt">Tốt</option>
+                <option value="Lỗi">Lỗi</option>
+                <option value="Không có">Không có</option>
+            </select>
+            <input type="text" id="noteAmThanh" class="note-input" placeholder="Ghi chú loa/âm ly">
+        </div>
+        <div class="form-row">
+            <label for="tinhTrangDieuHoa">Tình trạng máy lạnh, máy quạt:</label>
+            <select id="tinhTrangDieuHoa" name="tinhTrangDieuHoa">
+                <option value="Tốt">Tốt</option>
+                <option value="Lỗi">Lỗi</option>
+                <option value="Không có">Không có</option>
+            </select>
+            <input type="text" id="noteDieuHoa" class="note-input" placeholder="Ghi chú máy lạnh/quạt">
+        </div>
+        <div class="form-row">
+            <label for="tinhTrangVeSinh">Tình trạng vệ sinh PM:</label>
+            <select id="tinhTrangVeSinh" name="tinhTrangVeSinh">
+                <option value="Sạch">Sạch</option>
+                <option value="Chưa sạch">Chưa sạch</option>
+            </select>
+            <input type="text" id="noteVeSinh" class="note-input" placeholder="Ghi chú vệ sinh">
+        </div>
+        <div class="form-row">
+            <label for="previewBox">Nội dung báo cáo:</label>
+            <textarea id="previewBox" name="previewBox" rows="10" readonly></textarea>
+        </div>
+    </form>
+    <div class="form-actions">
+        <button type="button" onclick="generateAndCopyReport()">Tạo & Sao chép Báo cáo</button>
+    </div>
+</div>
+
+<div id="Tab2" class="tab-content">
+    <h2>Nội dung Tab 2</h2>
+    <p>Đây là nội dung của tab thứ hai.</p>
+</div>
+
+<div id="Tab3" class="tab-content">
+    <h2>Nội dung Tab 3</h2>
+    <p>Đây là nội dung của tab thứ ba.</p>
+</div>
+
+<script>
+    function openTab(evt, tabName) {
+        const tabcontent = document.getElementsByClassName("tab-content");
+        for (let i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+        const tabbuttons = document.getElementsByClassName("tab-button");
+        for (let i = 0; i < tabbuttons.length; i++) {
+            tabbuttons[i].className = tabbuttons[i].className.replace(" active", "");
+        }
+        document.getElementById(tabName).style.display = "block";
+        evt.currentTarget.className += " active";
+    }
+
+    function calculateTotal() {
+        const soMayGV = parseInt(document.getElementById('soMayGV').value) || 0;
+        const soMayHS = parseInt(document.getElementById('soMayHS').value) || 0;
+        const tongSoMay = soMayGV + soMayHS;
+        document.getElementById('tongSoMay').value = tongSoMay;
+        saveData();
+        updatePreview();
+    }
+
+    function saveData() {
+        const data = {
+            tenGV: document.getElementById('tenGV').value,
+            tenTG: document.getElementById('tenTG').value,
+            phongMay: document.getElementById('phongMay').value,
+            soMayGV: document.getElementById('soMayGV').value,
+            soMayHS: document.getElementById('soMayHS').value,
+            soMayLoi: document.getElementById('soMayLoi').value,
+            noteMayLoi: document.getElementById('noteMayLoi').value, // Thêm trường ghi chú mới
+            soMayThieu: document.getElementById('soMayThieu').value,
+            tinhTrangNetSupport: document.getElementById('tinhTrangNetSupport').value,
+            noteNetsupport: document.getElementById('noteNetsupport').value, // Thêm trường ghi chú mới
+            tinhTrangAmThanh: document.getElementById('tinhTrangAmThanh').value,
+            noteAmThanh: document.getElementById('noteAmThanh').value, // Thêm trường ghi chú mới
+            tinhTrangDieuHoa: document.getElementById('tinhTrangDieuHoa').value,
+            noteDieuHoa: document.getElementById('noteDieuHoa').value, // Thêm trường ghi chú mới
+            tinhTrangVeSinh: document.getElementById('tinhTrangVeSinh').value,
+            noteVeSinh: document.getElementById('noteVeSinh').value // Thêm trường ghi chú mới
+        };
+        localStorage.setItem('baoCaoData', JSON.stringify(data));
+    }
+
+    function loadData() {
+        const savedData = localStorage.getItem('baoCaoData');
+        if (savedData) {
+            const data = JSON.parse(savedData);
+            document.getElementById('tenGV').value = data.tenGV || '';
+            document.getElementById('tenTG').value = data.tenTG || '';
+            document.getElementById('phongMay').value = data.phongMay || '';
+            document.getElementById('soMayGV').value = data.soMayGV || '1';
+            document.getElementById('soMayHS').value = data.soMayHS || '';
+            document.getElementById('soMayLoi').value = data.soMayLoi || '';
+            document.getElementById('noteMayLoi').value = data.noteMayLoi || ''; // Tải ghi chú
+            document.getElementById('soMayThieu').value = data.soMayThieu || '';
+            document.getElementById('tinhTrangNetSupport').value = data.tinhTrangNetSupport || 'Tốt';
+            document.getElementById('noteNetsupport').value = data.noteNetsupport || ''; // Tải ghi chú
+            document.getElementById('tinhTrangAmThanh').value = data.tinhTrangAmThanh || 'Tốt';
+            document.getElementById('noteAmThanh').value = data.noteAmThanh || ''; // Tải ghi chú
+            document.getElementById('tinhTrangDieuHoa').value = data.tinhTrangDieuHoa || 'Tốt';
+            document.getElementById('noteDieuHoa').value = data.noteDieuHoa || ''; // Tải ghi chú
+            document.getElementById('tinhTrangVeSinh').value = data.tinhTrangVeSinh || 'Sạch';
+            document.getElementById('noteVeSinh').value = data.noteVeSinh || ''; // Tải ghi chú
+
+            calculateTotal();
+        }
+    }
+
+    function updatePreview() {
+        const tenGV = document.getElementById('tenGV').value;
+        const tenTG = document.getElementById('tenTG').value;
+        const phongMay = document.getElementById('phongMay').value;
+        const soMayGV = document.getElementById('soMayGV').value;
+        const soMayHS = document.getElementById('soMayHS').value;
+        const tongSoMay = document.getElementById('tongSoMay').value;
+        const soMayLoi = document.getElementById('soMayLoi').value;
+        const soMayThieu = document.getElementById('soMayThieu').value;
+        const tinhTrangNetSupport = document.getElementById('tinhTrangNetSupport').value;
+        const tinhTrangAmThanh = document.getElementById('tinhTrangAmThanh').value;
+        const tinhTrangDieuHoa = document.getElementById('tinhTrangDieuHoa').value;
+        const tinhTrangVeSinh = document.getElementById('tinhTrangVeSinh').value;
+
+        // Lấy nội dung ghi chú
+        const noteMayLoi = document.getElementById('noteMayLoi').value ? ` (${document.getElementById('noteMayLoi').value})` : '';
+        const noteNetsupport = document.getElementById('noteNetsupport').value ? ` (${document.getElementById('noteNetsupport').value})` : '';
+        const noteAmThanh = document.getElementById('noteAmThanh').value ? ` (${document.getElementById('noteAmThanh').value})` : '';
+        const noteDieuHoa = document.getElementById('noteDieuHoa').value ? ` (${document.getElementById('noteDieuHoa').value})` : '';
+        const noteVeSinh = document.getElementById('noteVeSinh').value ? ` (${document.getElementById('noteVeSinh').value})` : '';
+
+        const reportText = `BÁO CÁO ĐẦU BUỔI DẠY
+- Tên Giáo Viên: ${tenGV}
+- Tên Trợ Giảng: ${tenTG}
+- Phòng Máy: ${phongMay}
+- Tổng số máy: ${tongSoMay} máy (Gồm ${soMayGV} GV + ${soMayHS} HS).
+- Tổng số máy bị lỗi: ${soMayLoi} máy${noteMayLoi}.
+- Số máy còn thiếu cho HS: ${soMayThieu} máy.
+- Tình trạng Netsupport: ${tinhTrangNetSupport}${noteNetsupport}
+- Tình trạng Loa, Âm ly: ${tinhTrangAmThanh}${noteAmThanh}
+- Tình trạng máy lạnh, máy quạt: ${tinhTrangDieuHoa}${noteDieuHoa}
+- Tình trạng vệ sinh PM: ${tinhTrangVeSinh}${noteVeSinh}`;
+
+        document.getElementById('previewBox').value = reportText;
+    }
+
+    function generateAndCopyReport() {
+        const reportText = document.getElementById('previewBox').value;
+
+        navigator.clipboard.writeText(reportText).then(() => {
+            alert('Đã sao chép báo cáo vào clipboard!');
+        }).catch(err => {
+            console.error('Không thể sao chép văn bản: ', err);
+            alert('Không thể sao chép báo cáo. Vui lòng thử lại.');
+        });
+    }
+
+    document.getElementById('baoCaoForm').addEventListener('input', () => {
+        saveData();
+        updatePreview();
+    });
+
+    document.addEventListener("DOMContentLoaded", function() {
+        openTab({ currentTarget: document.querySelector('.tab-button') }, 'BaoCao');
+        loadData();
+    });
+</script>
+
+</body>
+</html>
